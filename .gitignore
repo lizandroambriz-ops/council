@@ -1,0 +1,9 @@
+# Runtime data produced when the skill runs — never publish these.
+sessions/
+checkpoints/
+*.html
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
