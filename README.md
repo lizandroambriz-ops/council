@@ -14,8 +14,8 @@ Two ways to run: **validate one idea** or **compare two ideas (A vs. B)**. Once 
 The skill must live at the path `.claude/skills/council/`. Clone the repo, then run the bundled installer:
 
 ```bash
-git clone https://github.com/lizandroambriz-ops/llm-council.git
-cd llm-council
+git clone https://github.com/lizandroambriz-ops/council.git
+cd council
 ./install.sh            # installs for all projects → ~/.claude/skills/council/
 ./install.sh --project  # or install into the current project → ./.claude/skills/council/
 ```
