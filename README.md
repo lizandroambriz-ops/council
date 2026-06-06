@@ -63,11 +63,35 @@ node --test skills/council/lib/*.test.mjs   # expect: 82 pass
 
 ## Usage
 
-Run `/council:council` (plugin) or `/council` (standalone). You'll get a short menu: **Validate an idea**, **Compare two ideas**, or **Past sessions**. Once you describe the idea, the Council recommends an effort level and model (you can override either), then shows a token + wall-time estimate at the launch gate so you can abort before spending. Sessions are checkpointed at every phase boundary and auto-resume if interrupted. Each completed session writes a Markdown transcript and a self-contained HTML report.
+Start it in Claude Code:
 
-Session data (checkpoints, transcripts, HTML reports) is written under **`.claude/council/`** in your current project — never inside the plugin directory, so it survives plugin updates.
+- **Plugin install:** `/council:council`
+- **Standalone install:** `/council`
 
-The primary model — **Opus 4.7, Sonnet 4.6, or Haiku 4.5**, recommended per query and overridable — runs the needle-moving work (research, Chair synthesis, follow-up). Haiku 4.5 always runs the low-value utility calls (scope read, casting, seat selection, unknowns classification), so a higher-tier choice only spends where it changes the verdict.
+You'll get a short menu. Pick what you want to do:
+
+| Mode | What it does |
+|---|---|
+| **Validate an idea** | Stress-test a single idea or plan and get a scored verdict with the strongest objections, failure modes, and next actions. |
+| **Compare two ideas** | Put two options head-to-head (A vs. B) and get a reasoned recommendation instead of a coin flip. |
+| **Past sessions** | Reopen the **logbook** of previous verdicts, record how each one turned out, or **follow up** with new questions over a completed verdict. |
+
+### How a run works
+
+1. **Describe your idea** in a sentence — the Council asks a few sharp clarifying questions first.
+2. **Pick the depth** — it recommends an effort level and you can change it:
+   - **Quick** — a fast gut-check.
+   - **Standard** — the balanced default.
+   - **Deep** — adds cross-examination between the experts for high-stakes calls.
+3. **See the cost before you spend** — a token + wall-time estimate appears at the launch gate, so you can abort before the expensive research phase.
+4. **It runs** — expert personas research and stress-test your idea in parallel; the Chair synthesises the verdict. If a run is interrupted, it **auto-resumes** where it left off.
+5. **Read the result** — every run produces a Markdown transcript and a self-contained **HTML report** you can open or share.
+
+### Good things to know
+
+- **Where your data lives:** checkpoints, transcripts, and HTML reports are written to **`.claude/council/`** in your current project — never inside the plugin, so they survive updates. Delete that folder any time to clear your history.
+- **Model choice:** the heavy thinking runs on your chosen primary model (**Opus 4.7, Sonnet 4.6, or Haiku 4.5** — recommended per query, overridable). Cheap utility steps always run on Haiku 4.5, so picking a bigger model only spends where it actually changes the verdict.
+- **Tip:** press **Shift+Tab** to enable auto-accept mode before a run — the Council makes many small local calls, and approving each one slows things down.
 
 ## Layout
 
