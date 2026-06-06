@@ -8,21 +8,21 @@ UX rules from `SKILL.md` apply — narrate intent in short plain English before 
 
 **Do not hand-assemble the session.** One module reads every checkpoint artifact and returns the canonical session object that all three renderers consume. Narrate *"Bundling the full session for export."* and run:
 ```
-node .claude/skills/council/lib/cli.mjs load-session .claude/skills/council/checkpoints/<id> > /tmp/council-<id>.json
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" load-session .claude/council/checkpoints/<id> > /tmp/council-<id>.json
 ```
 
 ## 1. Session markdown
 
 Narrate *"Writing the session markdown."*
 ```
-node .claude/skills/council/lib/cli.mjs render-session-md < /tmp/council-<id>.json > .claude/skills/council/sessions/<id>.md
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" render-session-md < /tmp/council-<id>.json > .claude/council/sessions/<id>.md
 ```
 
 ## 2. Rich HTML report
 
 Narrate *"Writing the HTML report you'll open at the end."*
 ```
-node .claude/skills/council/lib/cli.mjs render-html < /tmp/council-<id>.json > .claude/skills/council/sessions/<id>.html
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" render-html < /tmp/council-<id>.json > .claude/council/sessions/<id>.html
 ```
 The file is self-contained (inline styles, no external assets), with a decision-card hero, collapsible seat cards, visual score bars, and a distinct pre-resolved section. Head-to-Head sessions render a winner banner and per-option seat cards instead.
 
@@ -31,7 +31,7 @@ The file is self-contained (inline styles, no external assets), with a decision-
 Narrate *"Appending this session to the thread log."* Build the entry from the loaded session and append:
 ```
 echo '{"date":"<YYYY-MM-DD>","idea":"<idea>","confidence":"<level>","scores":{"feasibility":N,"differentiation":N,"upside":N},"firstAction":"<first Today action>","topUnknowns":[...],"outcomes":[]}' \
-  | node .claude/skills/council/lib/cli.mjs format-thread-entry >> .claude/skills/council/sessions/THREAD.md
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" format-thread-entry >> .claude/council/sessions/THREAD.md
 ```
 (Ensure a blank line separates entries.)
 
@@ -39,11 +39,11 @@ echo '{"date":"<YYYY-MM-DD>","idea":"<idea>","confidence":"<level>","scores":{"f
 
 Narrate *"Marking the session complete."*
 ```
-node .claude/skills/council/lib/cli.mjs write-done .claude/skills/council/checkpoints/<id>
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-done .claude/council/checkpoints/<id>
 ```
 This removes the session from resume candidates.
 
-Resolve the **absolute** path to the HTML report (current working directory joined with `.claude/skills/council/sessions/<id>.html`) and print exactly this block — **nothing else** at this point (no recap, no decision-card re-print, no transcript paste):
+Resolve the **absolute** path to the HTML report (current working directory joined with `.claude/council/sessions/<id>.html`) and print exactly this block — **nothing else** at this point (no recap, no decision-card re-print, no transcript paste):
 
 ```
 ✓ Council session complete
@@ -51,7 +51,7 @@ Resolve the **absolute** path to the HTML report (current working directory join
   Open or download your results:
   file://<absolute path to .html>
 
-  (Markdown: .claude/skills/council/sessions/<id>.md)
+  (Markdown: .claude/council/sessions/<id>.md)
 ```
 
 Then open the follow-up conversation (`phases/followup.md`).

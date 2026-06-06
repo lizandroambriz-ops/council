@@ -34,7 +34,7 @@ As each seat returns:
 1. Write the checkpoint:
    ```
    echo '{"key":"<key>","name":"<name>","update":["<bullet>", ...],"pressBack":["<bullet>", ...]}' \
-     | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> rebuttal__<key>.json
+     | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> rebuttal__<key>.json
    ```
 2. Emit **exactly one tick line**: `✓ <Seat Name> revised`.
 3. Do **not** paste the update / press-back bullets into chat.

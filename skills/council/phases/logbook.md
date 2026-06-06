@@ -10,21 +10,21 @@ Narrate *"Loading your past sessions."*
 
 Scan completed sessions and build one row each. A session belongs in the logbook only if it has a `DONE` marker and is **not** abandoned:
 ```
-node .claude/skills/council/lib/cli.mjs scan-sessions .claude/skills/council/checkpoints
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" scan-sessions .claude/council/checkpoints
 ```
 For each completed, non-abandoned session, load it:
 ```
-node .claude/skills/council/lib/cli.mjs load-session .claude/skills/council/checkpoints/<id>
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" load-session .claude/council/checkpoints/<id>
 ```
 Take confidence and per-dimension means from `card`, the first action from `card.nextActions.today`, and compute its outcome status:
 ```
 echo '{"actions":["<all recommended actions>"],"outcomes":<outcomes.json or []>}' \
-  | node .claude/skills/council/lib/cli.mjs session-outcome-status
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" session-outcome-status
 ```
 Returns `pending` / `partially recorded` / `fully recorded`. Then render the list (newest first):
 ```
 echo '[{"date":"<YYYY-MM-DD HH:MM>","idea":"<idea>","confidence":"<level>","scores":{...},"firstAction":"<first Today action>","outcomeStatus":"<status>"}, ...]' \
-  | node .claude/skills/council/lib/cli.mjs render-logbook
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" render-logbook
 ```
 Show the rendered list, then use **`AskUserQuestion`** to pick a session (one option per session, labelled by date + idea excerpt).
 
@@ -52,12 +52,12 @@ List the session's recommended actions grouped Today / This week / This month. F
 Apply each recorded outcome to `outcomes.json`:
 ```
 echo '{"outcomes":<current outcomes.json or []>,"entry":{"action":"<action text>","status":"<taken|skipped|pending>","note":"<note or null>","recordedAt":"<ISO timestamp>"}}' \
-  | node .claude/skills/council/lib/cli.mjs record-outcome
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" record-outcome
 ```
 `record-outcome` replaces any prior entry for the same action. Write the returned array back:
 ```
 echo '<updated outcomes array>' \
-  | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> outcomes.json
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> outcomes.json
 ```
 
 ## 4. Update the thread

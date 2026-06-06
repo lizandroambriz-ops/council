@@ -1,4 +1,5 @@
 # Runtime data produced when the skill runs — never publish these.
+.claude/council/
 sessions/
 checkpoints/
 *.html

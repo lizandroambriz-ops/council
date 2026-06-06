@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 #
-# Install The Council skill into a Claude Code skills directory.
+# Install The Council as a standalone Claude Code skill (the clone-and-copy
+# route). Prefer the plugin install if you can — see the README — this script
+# is for users who'd rather vendor the skill directly.
 #
 #   ./install.sh            # personal install → ~/.claude/skills/council/
 #   ./install.sh --project  # project install  → ./.claude/skills/council/
 #
 set -euo pipefail
 
-SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/skills/council" && pwd)"
 
 case "${1:-}" in
   --project|-p)
@@ -32,7 +34,7 @@ esac
 # Sanity-check we are running from a clone that contains the skill.
 for item in SKILL.md phases lib; do
   if [ ! -e "$SRC/$item" ]; then
-    echo "error: '$item' not found next to install.sh — run this from the cloned repo." >&2
+    echo "error: '$item' not found under skills/council/ — run this from the cloned repo." >&2
     exit 1
   fi
 done

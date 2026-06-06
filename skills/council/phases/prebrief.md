@@ -10,9 +10,9 @@ UX rules from `SKILL.md` apply.
 
 Narrate (if relevant): *"Reading prior session memory to inform my questions."*
 
-Read `.claude/skills/council/sessions/THREAD.md` if it exists, and surface the 3 most relevant prior entries:
+Read `.claude/council/sessions/THREAD.md` if it exists, and surface the 3 most relevant prior entries:
 ```
-node .claude/skills/council/lib/cli.mjs recent-entries <<'JSON'
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" recent-entries <<'JSON'
 {"thread": <THREAD.md contents as a JSON string>, "n": 3}
 JSON
 ```
@@ -32,7 +32,7 @@ Ask clarifying questions **one at a time**, waiting for each answer. Each questi
 Immediately after each answer, narrate *"Saving your answer."* and rewrite `prebrief.json`:
 ```
 echo '[["q1","a1"],["q2","a2"], ...]' \
-  | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> prebrief.json
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> prebrief.json
 ```
 
 **On resume:** read the existing `prebrief.json` first; continue from the first unanswered question (or proceed to casting if the pre-brief had ended).

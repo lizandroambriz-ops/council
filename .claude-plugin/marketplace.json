@@ -1,0 +1,30 @@
+{
+  "name": "council",
+  "owner": {
+    "name": "Lizandro Ambriz"
+  },
+  "description": "The Council — a multi-agent idea-validation panel for Claude Code.",
+  "plugins": [
+    {
+      "name": "council",
+      "source": "./",
+      "description": "The Council — a multi-agent idea-validation panel. AI expert personas independently stress-test an idea with live web research; a Chair synthesises a scored verdict with blocking conditions and time-bound next actions.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Lizandro Ambriz"
+      },
+      "homepage": "https://github.com/lizandroambriz-ops/council",
+      "repository": "https://github.com/lizandroambriz-ops/council",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": [
+        "idea-validation",
+        "decision-making",
+        "second-opinion",
+        "multi-agent",
+        "red-team",
+        "claude-code"
+      ]
+    }
+  ]
+}

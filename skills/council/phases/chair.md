@@ -11,7 +11,7 @@ UX rules from `SKILL.md` apply — narrate intent before each tool call, don't p
 Narrate *"Aggregating seat scores."* Then run:
 ```
 echo '[{"seat":"adversary","feasibility":N,"differentiation":N,"upside":N}, ...]' \
-  | node .claude/skills/council/lib/cli.mjs aggregate-scores
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" aggregate-scores
 ```
 Returns per-dimension `{mean, variance, highVariance}`. `highVariance` (variance > 1.0) flags dimensions where the council genuinely disagrees — call these out in the verdict.
 
@@ -35,7 +35,7 @@ Give the Chair: the idea, all pre-brief Q&A, the aggregate score grid, every sea
 
 Narrate *"Saving the verdict."* Then write:
 ```
-echo '<verdict markdown>' | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> verdict.md
+echo '<verdict markdown>' | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> verdict.md
 ```
 
 ## 4. Build + show a compact decision card
@@ -43,12 +43,12 @@ echo '<verdict markdown>' | node .claude/skills/council/lib/cli.mjs write-artifa
 Build it:
 ```
 echo '{"confidence":"<Low|Medium|High>","grid":<aggregate grid>,"blockingConditions":[...],"nextActions":{"today":[...],"thisWeek":[...],"thisMonth":[...]},"unknowns":[...]}' \
-  | node .claude/skills/council/lib/cli.mjs build-decision-card
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" build-decision-card
 ```
 Narrate *"Saving the decision card."* Then checkpoint the card output verbatim — the export and HTML both read it from here:
 ```
 echo '<build-decision-card output>' \
-  | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> card.json
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> card.json
 ```
 
 Print **one compact block** to chat — and nothing more. The full 9-section verdict is already on disk and goes into the exports. Do **not** paste the verdict body, seat reasoning, per-seat grids, "this week" / "this month" actions, or the full unknowns ledger into chat.

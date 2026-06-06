@@ -10,7 +10,7 @@ UX rules from `SKILL.md` apply.
 
 Narrate *"Loading the full session so you can ask anything about it."* Then load:
 ```
-node .claude/skills/council/lib/cli.mjs load-session .claude/skills/council/checkpoints/<id>
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" load-session .claude/council/checkpoints/<id>
 ```
 Then ask:
 > What questions do you have?
@@ -33,7 +33,7 @@ Escalation spawns **one** seat sub-agent with that seat's persona config + the f
 Immediately after each response, append the round to `qa_log.md`:
 ```
 printf '\n## Q: %s\n\n%s\n' "<user question>" "<response>" \
-  >> .claude/skills/council/checkpoints/<id>/qa_log.md
+  >> .claude/council/checkpoints/<id>/qa_log.md
 ```
 
 ## Graceful close

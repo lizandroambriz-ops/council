@@ -13,12 +13,12 @@ This `SKILL.md` is the **router**. It detects resumable sessions, renders the me
 
 - **Helper CLI** — all deterministic work (scoring, checkpoint I/O, rendering, config) is done by a tested Node module. Invoke it as:
   ```
-  node .claude/skills/council/lib/cli.mjs <command> [args]   # JSON payloads on stdin
+  node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" <command> [args]   # JSON payloads on stdin
   ```
-  Paths are relative to the repo root.
-- **Data locations**
-  - Checkpoints: `.claude/skills/council/checkpoints/<session-id>/`
-  - Session outputs: `.claude/skills/council/sessions/` (`<id>.md`, `<id>.html`, `THREAD.md`)
+  The `${CLAUDE_PLUGIN_ROOT:-.claude}` prefix makes the same command work in both install modes: as a **plugin**, Claude Code sets `$CLAUDE_PLUGIN_ROOT` to the plugin's directory; as a **standalone skill** the variable is unset, so it falls back to `.claude` (i.e. `.claude/skills/council/lib/cli.mjs`). Always keep the quotes — the plugin path may contain spaces. Run the command from the project root.
+- **Data locations** — these are always written under the **current project**, never inside the plugin directory (so they survive plugin updates):
+  - Checkpoints: `.claude/council/checkpoints/<session-id>/`
+  - Session outputs: `.claude/council/sessions/` (`<id>.md`, `<id>.html`, `THREAD.md`)
   - Model preference: `~/.claude/quorum_config.json`
 - **Session id** — `cli.mjs session-id` returns the canonical `YYYYMMDDTHHMMSS` id.
 - **Models — two tiers.** **Needle-moving work** (research seats, cross-examination, Chair synthesis, follow-up, pre-brief questions) runs on the session's **primary model** — Opus 4.7, Sonnet 4.6, or Haiku 4.5 — recommended per query in `phases/scope.md` and stored in `meta.json`. **Low-value work always runs on Haiku 4.5** regardless of the primary choice: the scope read, casting director, seat selector, and unknowns classifier. Choosing Opus therefore only spends Opus where it changes the verdict.
@@ -43,7 +43,7 @@ These rules govern how you talk to the user. Follow them in this file and in eve
 
 2. **Auto-accept tip.** Emit the Shift+Tab line from UX rule 2 (once per session).
 
-3. **Check for resumable sessions.** Run `cli.mjs select-resume .claude/skills/council/checkpoints` and interpret `action`:
+3. **Check for resumable sessions.** Run `cli.mjs select-resume .claude/council/checkpoints` and interpret `action`:
    - `resume` — announce `Resuming: <idea excerpt> — stopped after <session.lastPhase>` and jump to the phase **after** `lastPhase`. Don't re-ask answered questions.
    - `picker` — list resumable sessions and use `AskUserQuestion` to let the user pick one or start fresh.
    - `menu` — proceed to the main menu.
@@ -72,7 +72,7 @@ Model selection (`phases/settings.md`) is no longer a menu item — model is rec
 3. **Create the session** — narrate *"Creating the session folder and meta file so progress can be saved."*, then run `session-id` and write `meta.json` (now carrying the recommended model/effort and the scope signals) via:
    ```
    echo '{"idea":"<idea>","model":"<model>","effort":"<quick|standard|deep>","stakes":"<low|medium|high>","createdAt":"<id>","abandoned":false}' \
-     | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> meta.json
+     | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> meta.json
    ```
 4. Run phases in order:
 
@@ -94,6 +94,6 @@ Model selection (`phases/settings.md`) is no longer a menu item — model is rec
 
 If the user says "quit" / "cancel" / "stop" mid-session, mark abandoned and stop:
 ```
-node .claude/skills/council/lib/cli.mjs mark-abandoned .claude/skills/council/checkpoints/<id>
+node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" mark-abandoned .claude/council/checkpoints/<id>
 ```
 Aborting at the casting preflight estimate is **not** a quit — no `abandoned` marker (no research was committed).

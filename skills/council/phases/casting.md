@@ -20,7 +20,7 @@ Pick the format to fit the lens: a market-sizer is `quantitative`, a brand/posit
 Pass the dynamic seats through the CLI, which prepends the three permanent seats and validates formats:
 ```
 echo '[{"name":"...","background":"...","lens":"...","format":"qualitative"}, ...]' \
-  | node .claude/skills/council/lib/cli.mjs build-bench
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" build-bench
 ```
 The result has `permanent` (The Adversary, The Pre-Mortem, The Resource Realist) and `dynamic` (each with a derived `key`). An invalid format exits 1 — fix and retry.
 
@@ -31,7 +31,7 @@ Display the bench compactly — permanent first, then each dynamic seat with its
 Then show the **cost estimate for this run** — the abort-before-spend gate, since research launches right after and is the dominant cost. Count the dynamic seats from `build-bench` (the length of `dynamic`, not counting the 3 permanent) and run the estimator with the chosen effort and that real count:
 ```
 echo '{"effort":"<quick|standard|deep>","dynamicSeats":<N>}' \
-  | node .claude/skills/council/lib/cli.mjs estimate-cost
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" estimate-cost
 ```
 Show the returned `tokensLabel` and `walltimeLabel` on one line, flagged as approximate — e.g. *"Estimated cost: ~145k–338k tokens · ~3–5 min (rough — actual depends on the idea and how much the live web returns)."*
 
@@ -49,6 +49,6 @@ If they pick **Cancel**, stop. Do **not** write an `abandoned` marker — no res
 
 If they pick **Proceed**, narrate *"Saving the bench."* and write it (only on approval):
 ```
-echo '<bench JSON>' | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> seats.json
+echo '<bench JSON>' | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> seats.json
 ```
 Then hand off to `phases/research.md`.

@@ -38,7 +38,7 @@ As each seat returns:
 1. Narrate the write in one short sentence (e.g. *"Saving The Adversary's findings."*), then write the checkpoint:
    ```
    echo '{"key":"<key>","name":"<name>","format":"<format>","summary":"<headline>","reasoning":"<full output>","scores":{"feasibility":N,"differentiation":N,"upside":N}}' \
-     | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> seat__<key>.json
+     | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> seat__<key>.json
    ```
 2. Emit **exactly one tick line** — and nothing else from that seat:
    - Single-idea sessions: `✓ <Seat Name> (F<feasibility>/D<differentiation>/U<upside>)`

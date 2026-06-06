@@ -19,7 +19,7 @@ Narrate *"Classifying which unknowns the web can actually answer."* Spawn a **Ha
 Rank the answerable ones:
 ```
 echo '{"unknowns":[{"text":"<unknown>","webResolvable":true,"leverage":N}, ...],"n":3}' \
-  | node .claude/skills/council/lib/cli.mjs top-unknowns
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" top-unknowns
 ```
 Returns up to top 3 web-resolvable unknowns by leverage.
 
@@ -38,7 +38,7 @@ Emit one tick line per unknown — e.g. `✓ Unknown 1 of 3` — and nothing mor
 After all entries are complete, narrate *"Saving resolved unknowns."* Then:
 ```
 echo '[{"question":"<original unknown>","answer":"<finding> (<source>) — <one-sentence implication>"}, ...]' \
-  | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> resolved.json
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> resolved.json
 ```
 
 Hand off to `phases/export.md`. The session loader folds `resolved.json` into the session's pre-resolved unknowns block automatically.

@@ -8,7 +8,7 @@ UX rules from `SKILL.md` apply — especially: use `AskUserQuestion` for the cho
 
 1. Narrate: *"Checking your current model preference."* Then run:
    ```
-   node .claude/skills/council/lib/cli.mjs config-get ~/.claude/quorum_config.json
+   node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" config-get ~/.claude/quorum_config.json
    ```
    Tell the user which model is currently saved.
 
@@ -19,7 +19,7 @@ UX rules from `SKILL.md` apply — especially: use `AskUserQuestion` for the cho
 
 3. Map the selection to `opus-4-7`, `sonnet-4-6`, or `haiku-4-5`, narrate *"Saving your selection."* and run:
    ```
-   node .claude/skills/council/lib/cli.mjs config-set ~/.claude/quorum_config.json <model>
+   node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" config-set ~/.claude/quorum_config.json <model>
    ```
    The command prints the saved config and rejects unknown models (exit 1) — surface any error rather than claiming success.
 

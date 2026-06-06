@@ -18,7 +18,7 @@ Capture both, then **recommend effort + model** — run `phases/scope.md` (secti
 Then narrate *"Creating the head-to-head session and saving its meta file."* and write `meta.json` (carrying the recommended model/effort and the scope signals):
 ```
 echo '{"idea":"A: <option A> vs B: <option B>","optionA":"<option A>","optionB":"<option B>","mode":"compare","model":"<model>","effort":"<quick|standard|deep>","stakes":"<low|medium|high>","createdAt":"<id>","abandoned":false}' \
-  | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> meta.json
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> meta.json
 ```
 
 ## Phase sequence (same as a single-idea session)
@@ -36,7 +36,7 @@ echo '{"idea":"A: <option A> vs B: <option B>","optionA":"<option A>","optionB":
   Checkpoint each seat with both score sets and its preference:
   ```
   echo '{"key":"<key>","name":"<name>","format":"<format>","findingsA":["..."],"findingsB":["..."],"scoresA":{"feasibility":N,"differentiation":N,"upside":N},"scoresB":{"feasibility":N,"differentiation":N,"upside":N},"prefers":"<A|B>","reason":"<one line>","summary":"<headline>","reasoning":"<full output>"}' \
-    | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> seat__<key>.json
+    | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> seat__<key>.json
   ```
 - **Cross-examination** (Deep) and **auto-resolve** (Standard/Deep) run as normal, against both options.
 
@@ -45,14 +45,14 @@ echo '{"idea":"A: <option A> vs B: <option B>","optionA":"<option A>","optionB":
 After research (and cross-exam on Deep), tally the bench and build the comparative verdict:
 ```
 echo '[{"seat":"<key>","prefers":"<A|B>","reason":"<one line>"}, ...]' \
-  | node .claude/skills/council/lib/cli.mjs comparison-verdict
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" comparison-verdict
 ```
 Returns `{tally:{a,b}, winner, tie, casesForA, casesForB}`. A `tie` means no seat majority — the Chair must break it on the strength of reasoning, not count.
 
 Checkpoint the verdict:
 ```
 echo '<comparison-verdict output>' \
-  | node .claude/skills/council/lib/cli.mjs write-artifact .claude/skills/council/checkpoints/<id> comparison.json
+  | node "${CLAUDE_PLUGIN_ROOT:-.claude}/skills/council/lib/cli.mjs" write-artifact .claude/council/checkpoints/<id> comparison.json
 ```
 
 The Chair produces:
